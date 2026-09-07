@@ -1,0 +1,27 @@
+// Wealth OS — Phase 0 data layer foundation.
+//
+// This schema exists only to prove Prisma + SQLite work end-to-end
+// (client generation, migration, query). It deliberately does NOT
+// model the real domain yet.
+//
+// Future phases will add models such as: User/Profile, FinancialPlan,
+// Portfolio, Holding, Transaction, Contribution, Scenario,
+// ExternalDataSource, CalculationResult. Do not add them until the
+// corresponding phase is scheduled.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Placeholder model proving the Prisma + SQLite data layer is wired
+/// up correctly. Not part of the Wealth OS domain model.
+model HealthCheck {
+  id        String   @id @default(cuid())
+  status    String   @default("ok")
+  checkedAt DateTime @default(now())
+}
