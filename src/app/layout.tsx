@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
-import { NavBar } from "@/components/nav-bar";
+import { Sidebar, MobileTopBar, MobileBottomNav } from "@/components/sidebar";
 
 const bodyFont = Inter({
   subsets: ["latin"],
@@ -31,11 +31,15 @@ export default function RootLayout({
       <body
         className={`${bodyFont.variable} ${headingFont.variable} min-h-screen bg-cream font-sans text-forest-700 antialiased`}
       >
-        <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col pb-20 md:pb-0">
-          <NavBar />
-          <main className="flex-1 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
-            {children}
-          </main>
+        <div className="flex min-h-screen w-full">
+          <Sidebar />
+          <div className="flex min-h-screen flex-1 flex-col">
+            <MobileTopBar />
+            <main className="flex-1 px-4 pb-24 pt-6 sm:px-6 md:px-10 md:py-10 lg:px-14">
+              <div className="mx-auto w-full max-w-4xl">{children}</div>
+            </main>
+            <MobileBottomNav />
+          </div>
         </div>
       </body>
     </html>

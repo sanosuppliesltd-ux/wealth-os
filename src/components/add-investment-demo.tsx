@@ -15,22 +15,26 @@ export function AddInvestmentDemo() {
 
   return (
     <Card>
-      <p className="text-xs font-medium uppercase tracking-wide text-forest-400">
-        Have extra cash?
-      </p>
-      <p className="mt-2 text-sm text-forest-600">
-        Record a one-off investment
-      </p>
-      <button
-        type="button"
-        onClick={() => {
-          setOpen(true);
-          setSubmitted(false);
-        }}
-        className="mt-4 rounded-full bg-forest-700 px-4 py-2 text-sm font-medium text-cream transition-colors hover:bg-forest-600"
-      >
-        + Add investment
-      </button>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-serif text-lg text-forest-700">
+            Have extra cash?
+          </p>
+          <p className="mt-1 text-sm text-forest-400">
+            Record a one-off investment
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(true);
+            setSubmitted(false);
+          }}
+          className="inline-flex items-center justify-center gap-1.5 rounded-full bg-forest-700 px-4 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-forest-600"
+        >
+          + Add investment
+        </button>
+      </div>
 
       {open ? (
         <div
