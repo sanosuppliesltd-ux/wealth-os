@@ -3,10 +3,12 @@ import { PageHeader } from "@/components/page-header";
 import { DisclosureBanner } from "@/components/disclosure-banner";
 import { DefinitionRow } from "@/components/icon-row";
 import { IconSparkle } from "@/components/icons";
-import { DEMO_PROFILE } from "@/domain/demo-profile";
-import { formatPaisaAsRupees } from "@/lib/money";
+import { getProfile } from "@/domain/profile";
+import { displayAmount, displayInteger } from "@/domain/profile-view";
 
-export default function WhatIfPage() {
+export default async function WhatIfPage() {
+  const profile = await getProfile();
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -19,18 +21,20 @@ export default function WhatIfPage() {
         <div className="mt-2 divide-y divide-forest-100">
           <DefinitionRow
             label="Monthly contribution"
-            value={formatPaisaAsRupees(DEMO_PROFILE.monthlyContributionPaisa)}
+            value={displayAmount(profile.monthlyContributionPaisa)}
           />
           <DefinitionRow label="Extra investment" value="Not entered" />
           <DefinitionRow
             label="Retirement age"
-            value={String(DEMO_PROFILE.retirementTargetAge)}
+            value={displayInteger(profile.retirementTargetAge)}
           />
           <DefinitionRow
             label="Retirement income"
-            value={`${formatPaisaAsRupees(
-              DEMO_PROFILE.retirementIncomePaisaPerMonthTodaysValue,
-            )} / month`}
+            value={
+              profile.retirementIncomeTargetPaisa === null
+                ? "Not set"
+                : `${displayAmount(profile.retirementIncomeTargetPaisa)} / month`
+            }
           />
           <DefinitionRow label="Inflation" value="Not set" />
           <DefinitionRow label="Investment return" value="Not set" />
@@ -58,7 +62,7 @@ export default function WhatIfPage() {
 
       <DisclosureBanner>
         No calculations are performed in this prototype. Inputs shown are
-        demo values.
+        read from your stated plan.
       </DisclosureBanner>
     </div>
   );

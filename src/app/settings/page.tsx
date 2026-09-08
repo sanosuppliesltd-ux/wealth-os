@@ -3,74 +3,26 @@ import { PageHeader } from "@/components/page-header";
 import { DisclosureBanner } from "@/components/disclosure-banner";
 import { DefinitionRow } from "@/components/icon-row";
 import { Toggle } from "@/components/toggle";
-import { IconUser, IconShield } from "@/components/icons";
-import {
-  DEMO_PROFILE,
-  DEMO_INVESTMENT_PREFERENCES,
-  DEMO_NOTIFICATIONS,
-} from "@/domain/demo-profile";
-import { formatPaisaAsRupees } from "@/lib/money";
+import { IconShield } from "@/components/icons";
+import { DEMO_NOTIFICATIONS } from "@/domain/demo-profile";
+import { getProfile } from "@/domain/profile";
+import { toProfileFormValues } from "@/domain/profile-view";
+import { SettingsForm } from "./settings-form";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const profile = await getProfile();
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Settings"
-        description="Preferences and app information."
+        description="This is your financial profile — the plan you've told us, not a projection."
       />
 
-      <Card>
-        <p className="font-serif text-lg text-forest-700">Profile</p>
-        <div className="mt-4 flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-50 text-forest-700">
-            <IconUser className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="text-sm font-semibold text-forest-700">You</p>
-            <p className="text-sm text-forest-400">you@wealthos.demo</p>
-          </div>
-        </div>
-      </Card>
-
-      <Card>
-        <p className="font-serif text-lg text-forest-700">
-          Investment preferences
-        </p>
-        <div className="mt-4 space-y-4">
-          {DEMO_INVESTMENT_PREFERENCES.map((pref) => (
-            <div key={pref.key} className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-forest-700">
-                  {pref.title}
-                </p>
-                <p className="text-sm text-forest-400">{pref.description}</p>
-              </div>
-              <Toggle defaultEnabled={pref.enabled} />
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      <Card>
-        <p className="font-serif text-lg text-forest-700">Retirement plan</p>
-        <div className="mt-2 divide-y divide-forest-100">
-          <DefinitionRow
-            label="Retirement age"
-            value={String(DEMO_PROFILE.retirementTargetAge)}
-          />
-          <DefinitionRow
-            label="Retirement income"
-            value={`${formatPaisaAsRupees(
-              DEMO_PROFILE.retirementIncomePaisaPerMonthTodaysValue,
-            )} / month`}
-            caption="Today's value"
-          />
-          <DefinitionRow
-            label="Investment horizon"
-            value={`${DEMO_PROFILE.planningHorizonYears} years`}
-          />
-        </div>
-      </Card>
+      <SettingsForm
+        initialValues={toProfileFormValues(profile)}
+        initialIsDemoData={profile.isDemoData}
+      />
 
       <Card>
         <p className="font-serif text-lg text-forest-700">Notifications</p>

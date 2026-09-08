@@ -25,3 +25,29 @@ model HealthCheck {
   status    String   @default("ok")
   checkedAt DateTime @default(now())
 }
+
+/// Phase 1 — the user's financial profile (the plan they state, not a
+/// calculation). Single-user application: exactly one row ever exists,
+/// enforced in application code (see src/domain/profile.ts), not by a
+/// database constraint.
+///
+/// Monetary fields are bigint paisa (1 rupee = 100 paisa), matching the
+/// engine's convention. This model holds stated inputs only — it must
+/// never be populated by a calculation.
+model Profile {
+  id                            String   @id @default(cuid())
+  name                          String?
+  dateOfBirth                   DateTime?
+  retirementTargetAge           Int?
+  retirementIncomeTargetPaisa   BigInt?
+  emergencyReserveTargetPaisa   BigInt?
+  monthlyContributionPaisa      BigInt?
+  startingCapitalPaisa          BigInt?
+  planningHorizonYears          Int?
+  shariahRequired               Boolean  @default(true)
+  contributionReviewFrequency   String   @default("twice-per-year")
+  majorDeclineBehaviour         String   @default("hold-or-buy-more")
+  isDemoData                    Boolean  @default(true)
+  createdAt                     DateTime @default(now())
+  updatedAt                     DateTime @updatedAt
+}

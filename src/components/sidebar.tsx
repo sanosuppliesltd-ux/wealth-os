@@ -59,7 +59,7 @@ function DemoNotice() {
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ isDemoData }: { isDemoData: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -86,7 +86,7 @@ export function Sidebar() {
           })}
         </nav>
       </div>
-      <DemoNotice />
+      {isDemoData ? <DemoNotice /> : null}
     </aside>
   );
 }
