@@ -1,8 +1,8 @@
 import { Card, StatCard } from "@/components/card";
 import { PageHeader } from "@/components/page-header";
 import { IconPiggyBank, IconTarget, IconSparkle } from "@/components/icons";
-import { DEMO_PROFILE } from "@/domain/demo-profile";
-import { formatPaisaAsRupees } from "@/lib/money";
+import { getProfile } from "@/domain/profile";
+import { displayAmount, displayInteger } from "@/domain/profile-view";
 
 const SCENARIOS = [
   { name: "Difficult", className: "bg-forest-50 text-forest-700" },
@@ -10,26 +10,30 @@ const SCENARIOS = [
   { name: "Strong", className: "bg-forest-700 text-cream" },
 ] as const;
 
-export default function RetirementPage() {
+export default async function RetirementPage() {
+  const profile = await getProfile();
+  const retirementTargetAge = displayInteger(
+    profile.retirementTargetAge,
+    "not yet set",
+  );
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Your retirement"
-        description={`Can I retire around ${DEMO_PROFILE.retirementTargetAge} and maintain my desired lifestyle?`}
+        description={`Can I retire around ${retirementTargetAge} and maintain my desired lifestyle?`}
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <StatCard
           label="Retirement age"
-          value={String(DEMO_PROFILE.retirementTargetAge)}
+          value={displayInteger(profile.retirementTargetAge)}
           caption="Target age"
           icon={IconPiggyBank}
         />
         <StatCard
           label="Retirement income"
-          value={formatPaisaAsRupees(
-            DEMO_PROFILE.retirementIncomePaisaPerMonthTodaysValue,
-          )}
+          value={displayAmount(profile.retirementIncomeTargetPaisa)}
           caption="Per month, today's value"
           icon={IconTarget}
         />

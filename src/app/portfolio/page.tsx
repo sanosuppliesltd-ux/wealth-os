@@ -2,10 +2,14 @@ import { Card } from "@/components/card";
 import { PageHeader } from "@/components/page-header";
 import { DisclosureBanner } from "@/components/disclosure-banner";
 import { IconLink } from "@/components/icons";
-import { DEMO_ALLOCATION, DEMO_PROFILE } from "@/domain/demo-profile";
+import { DEMO_ALLOCATION } from "@/domain/demo-profile";
+import { getProfile } from "@/domain/profile";
+import { displayAmount } from "@/domain/profile-view";
 import { formatPaisaAsRupees } from "@/lib/money";
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const profile = await getProfile();
+
   return (
     <div className="space-y-6">
       <PageHeader title="Portfolio" description="Where is my money?" />
@@ -15,7 +19,7 @@ export default function PortfolioPage() {
           Capital invested
         </p>
         <p className="mt-2 font-serif text-3xl text-forest-700">
-          {formatPaisaAsRupees(DEMO_PROFILE.startingCapitalPaisa)}
+          {displayAmount(profile.startingCapitalPaisa)}
         </p>
         <p className="mt-1 text-sm text-forest-400">
           Allocation of your starting capital
@@ -25,6 +29,11 @@ export default function PortfolioPage() {
       <Card>
         <p className="font-serif text-lg text-forest-700">
           How your capital is divided
+        </p>
+        <p className="mt-1 text-xs text-forest-400">
+          Illustrative demo allocation. Not linked to your stated starting
+          capital yet — real holdings and allocation modelling arrive in a
+          later phase.
         </p>
 
         <div className="mt-4 flex h-2.5 w-full overflow-hidden rounded-full bg-forest-50">

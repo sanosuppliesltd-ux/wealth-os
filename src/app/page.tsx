@@ -1,10 +1,13 @@
 import { Card, StatCard } from "@/components/card";
 import { AddInvestmentDemo } from "@/components/add-investment-demo";
-import { DEMO_PROFILE } from "@/domain/demo-profile";
-import { formatPaisaAsRupees } from "@/lib/money";
+import { DemoBanner } from "@/components/demo-banner";
+import { getProfile } from "@/domain/profile";
+import { displayAmount, displayInteger } from "@/domain/profile-view";
 import { IconShield, IconPiggyBank, IconTarget, IconPlus, IconSparkle } from "@/components/icons";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const profile = await getProfile();
+
   return (
     <div className="space-y-6">
       <div>
@@ -14,28 +17,32 @@ export default function HomePage() {
         </p>
       </div>
 
+      {profile.isDemoData ? <DemoBanner /> : null}
+
       {/* Main wealth card */}
       <Card className="bg-forest-700 text-cream">
         <div className="flex items-start justify-between">
           <p className="text-sm text-cream/70">Starting capital</p>
-          <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-cream/90">
-            Demo
-          </span>
+          {profile.isDemoData ? (
+            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-cream/90">
+              Demo
+            </span>
+          ) : null}
         </div>
         <p className="mt-2 font-serif text-4xl">
-          {formatPaisaAsRupees(DEMO_PROFILE.startingCapitalPaisa)}
+          {displayAmount(profile.startingCapitalPaisa)}
         </p>
         <div className="mt-5 grid grid-cols-2 gap-4 border-t border-cream/20 pt-5">
           <div>
             <p className="text-sm text-cream/70">Monthly contribution</p>
             <p className="mt-1 text-lg font-semibold">
-              {formatPaisaAsRupees(DEMO_PROFILE.monthlyContributionPaisa)}
+              {displayAmount(profile.monthlyContributionPaisa)}
             </p>
           </div>
           <div>
             <p className="text-sm text-cream/70">Emergency reserve target</p>
             <p className="mt-1 text-lg font-semibold">
-              {formatPaisaAsRupees(DEMO_PROFILE.emergencyReserveTargetPaisa)}
+              {displayAmount(profile.emergencyReserveTargetPaisa)}
             </p>
           </div>
         </div>
@@ -45,27 +52,25 @@ export default function HomePage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <StatCard
           label="Emergency reserve"
-          value={formatPaisaAsRupees(DEMO_PROFILE.emergencyReserveTargetPaisa)}
+          value={displayAmount(profile.emergencyReserveTargetPaisa)}
           caption="Target"
           icon={IconShield}
         />
         <StatCard
           label="Retirement age"
-          value={String(DEMO_PROFILE.retirementTargetAge)}
+          value={displayInteger(profile.retirementTargetAge)}
           caption="Target age"
           icon={IconPiggyBank}
         />
         <StatCard
           label="Retirement income"
-          value={formatPaisaAsRupees(
-            DEMO_PROFILE.retirementIncomePaisaPerMonthTodaysValue,
-          )}
+          value={displayAmount(profile.retirementIncomeTargetPaisa)}
           caption="Per month, today's value"
           icon={IconTarget}
         />
         <StatCard
           label="Monthly contribution"
-          value={formatPaisaAsRupees(DEMO_PROFILE.monthlyContributionPaisa)}
+          value={displayAmount(profile.monthlyContributionPaisa)}
           caption="Base amount"
           icon={IconPlus}
         />

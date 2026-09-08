@@ -1,18 +1,29 @@
+import type {
+  ContributionReviewFrequency,
+  MajorDeclineBehaviour,
+} from "./profile-schema";
+
 /**
- * Demo-only planning profile values for Phase 0 UI display.
+ * The single source of truth for the demo Profile seed values (Phase
+ * 1, section 4). Used both to seed the one-and-only Profile row when
+ * none exists yet, and to detect whether a saved Profile still matches
+ * the demo defaults (see `isDemoData` handling in `./profile.ts`).
  *
  * These are the approved Build 0.1 demo figures from the Master
- * Project Brief, section 3. They are NOT a real user profile, are not
- * persisted, and must never be used as inputs to real calculations.
- * A real financial profile model is future-phase work.
+ * Project Brief. They are not a real user's data.
  */
-export const DEMO_PROFILE = {
-  startingCapitalPaisa: 250_000_000n,
-  monthlyContributionPaisa: 7_500_000n,
-  emergencyReserveTargetPaisa: 100_000_000n,
+export const DEMO_PROFILE_DEFAULTS = {
+  name: null as string | null,
+  dateOfBirth: null as Date | null,
   retirementTargetAge: 55,
-  retirementIncomePaisaPerMonthTodaysValue: 40_000_000n,
+  retirementIncomeTargetPaisa: 40_000_000n,
+  emergencyReserveTargetPaisa: 100_000_000n,
+  monthlyContributionPaisa: 7_500_000n,
+  startingCapitalPaisa: 250_000_000n,
   planningHorizonYears: 15,
+  shariahRequired: true,
+  contributionReviewFrequency: "twice-per-year" satisfies ContributionReviewFrequency,
+  majorDeclineBehaviour: "hold-or-buy-more" satisfies MajorDeclineBehaviour,
 } as const;
 
 /**
@@ -20,7 +31,10 @@ export const DEMO_PROFILE = {
  * Portfolio screen layout purposes only. This is a fixed, literal
  * split of the known demo starting capital — not a calculation, not a
  * real holding, and not investment performance. Percentages sum to
- * 100% and paisa amounts sum exactly to DEMO_PROFILE.startingCapitalPaisa.
+ * 100% and paisa amounts sum exactly to
+ * DEMO_PROFILE_DEFAULTS.startingCapitalPaisa. It intentionally does
+ * not recompute against an edited starting capital — allocation
+ * modelling is future-phase work.
  */
 export const DEMO_ALLOCATION = [
   {
@@ -58,22 +72,6 @@ export const DEMO_ALLOCATION = [
     paisa: 12_500_000n,
     percent: 5,
     colorClassName: "bg-gray-400",
-  },
-] as const;
-
-/** Demo-only investment preference toggles for the Settings screen. */
-export const DEMO_INVESTMENT_PREFERENCES = [
-  {
-    key: "shariah",
-    title: "Shariah-compliant investments only",
-    description: "Only show Shariah-compliant options",
-    enabled: true,
-  },
-  {
-    key: "hold-through-declines",
-    title: "Stay invested during market declines",
-    description: "Prefer holding rather than selling",
-    enabled: true,
   },
 ] as const;
 
